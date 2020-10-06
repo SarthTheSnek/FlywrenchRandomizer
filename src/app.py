@@ -42,7 +42,6 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
     def initialize_buttons(self):
         # Randomize Seed Button
         seed_random_button = self.findChild(QPushButton, 'randomize_seed_button')
-
         seed_random_button.setToolTip('Generate a random string to be used for the seed')
         seed_random_button.clicked.connect(self.randomize_seed)
 
@@ -108,6 +107,7 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
         directory = str(QFileDialog.getExistingDirectory(self, "Select Flywrench Install Folder"))
         if not directory:
             return
+        self.settings.directory = directory
         self.statusBar.showMessage("Selected Directory: " + self.settings.directory)
         sender = self.sender()
         if sender.objectName() == 'explore_system_button':
@@ -200,7 +200,7 @@ def get_random_string(length):
 def check_for_application(directory):
     app_names = ["FlywrenchStudio.exe", "FlywrenchStudio.app", "FlywrenchStudio"]
     for app_name in app_names:
-        if os.path.exists(directory + app_name):
+        if os.path.exists(os.path.join(directory, app_name)):
             return app_name
     else:
         return False
