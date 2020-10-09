@@ -1,7 +1,7 @@
-from .planet import *
+from . import planet
 
 
-def convert_planet_to_dict(file) -> Planet:
+def convert_planet_to_dict(file) -> planet.Planet:
     try:
         f = open(file, "r")
     except FileNotFoundError:

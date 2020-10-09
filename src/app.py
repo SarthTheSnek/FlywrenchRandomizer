@@ -1,10 +1,8 @@
-from PySide2 import QtGui
-from PySide2.QtWidgets import *
+from PySide2 import QtGui, QtWidgets
 from zipfile import ZipFile
 
 from MainWindow import Ui_flywrench_main_window
-from logic.settings import Settings
-from logic.randomize import randomize_levels
+from logic import randomize, settings
 
 import os
 import platform
@@ -15,13 +13,13 @@ import sys
 operating_system = platform.platform()
 
 
-class MainWindow(QMainWindow, Ui_flywrench_main_window):
+class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
-        self.settings = Settings()
+        self.settings = settings.Settings()
 
-        self.statusBar = QStatusBar()
+        self.statusBar = QtWidgets.QStatusBar()
         self.setStatusBar(self.statusBar)
         self.setWindowIcon(QtGui.QIcon('Icon.ico'))
 
@@ -31,47 +29,47 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
 
     def initialize_buttons(self):
         # Randomize Seed Button
-        seed_random_button = self.findChild(QPushButton, 'randomize_seed_button')
+        seed_random_button = self.findChild(QtWidgets.QPushButton, 'randomize_seed_button')
         seed_random_button.setToolTip('Generate a random string to be used for the seed')
         seed_random_button.clicked.connect(self.randomize_seed)
 
         # Backup Files Button
-        backup_files_button = self.findChild(QPushButton, 'backup_files_button')
+        backup_files_button = self.findChild(QtWidgets.QPushButton, 'backup_files_button')
         backup_files_button.setToolTip('Backups up your Flywrench directory based on the "Flywrench Directory" textbox')
         backup_files_button.clicked.connect(lambda: self.compress_files(self.settings.directory))
 
         # Restore Files Button
-        restore_files_button = self.findChild(QPushButton, 'restore_files_button')
+        restore_files_button = self.findChild(QtWidgets.QPushButton, 'restore_files_button')
         restore_files_button.setToolTip('Restore Flywrench files from an archive\nOpens a file browser')
         restore_files_button.clicked.connect(lambda: self.restore_files())
 
         # Browse for directory
-        browse_files_button = self.findChild(QPushButton, 'explore_system_button')
+        browse_files_button = self.findChild(QtWidgets.QPushButton, 'explore_system_button')
         browse_files_button.setToolTip('Open a file browser to search for your Flywrench installation directory')
         browse_files_button.clicked.connect(self.file_window)
 
         # Quit Button
-        quit_button = self.findChild(QPushButton, 'quit_button')
+        quit_button = self.findChild(QtWidgets.QPushButton, 'quit_button')
         quit_button.setToolTip('Quits the program, duh!')
-        quit_button.clicked.connect(QApplication.instance().quit)
+        quit_button.clicked.connect(QtWidgets.QApplication.instance().quit)
 
         # Randomize Button
-        randomize_button = self.findChild(QPushButton, 'randomize_button')
+        randomize_button = self.findChild(QtWidgets.QPushButton, 'randomize_button')
         randomize_button.setToolTip('Randomize the levels')
         randomize_button.clicked.connect(self.randomize_levels)
 
     def initialize_textboxes(self):
         # Randomize Seed Button
-        self.seed_textbox = self.findChild(QLineEdit, 'seed_textbox')
+        self.seed_textbox = self.findChild(QtWidgets.QLineEdit, 'seed_textbox')
         self.seed_textbox.setText(get_random_string(16))
         self.seed_textbox.textChanged.connect(self.set_settings)
 
         # Populate Flywrench Directory
-        self.directory_textbox = self.findChild(QLineEdit, 'directory_textbox')
+        self.directory_textbox = self.findChild(QtWidgets.QLineEdit, 'directory_textbox')
         self.discover_directory()
 
     def initialize_checkboxes(self):
-        self.randomize_checkbox = self.findChild(QCheckBox, 'walls_checkbox')
+        self.randomize_checkbox = self.findChild(QtWidgets.QCheckBox, 'walls_checkbox')
         self.randomize_checkbox.setToolTip('Randomize the color of the walls of the levels')
         self.randomize_checkbox.stateChanged.connect(self.set_settings)
 
@@ -96,10 +94,10 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
             self.settings.directory = path
         else:
             msg = """Flywrench default directory not found!\nPlease select your directory before randomizing."""
-            QMessageBox.about(self, "Not Found!", msg)
+            QtWidgets.QMessageBox.about(self, "Not Found!", msg)
 
     def file_window(self):
-        directory = str(QFileDialog.getExistingDirectory(self, "Select Flywrench Install Folder"))
+        directory = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Flywrench Install Folder"))
         if not directory:
             return
         self.settings.directory = directory
@@ -141,7 +139,7 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
     def compress_files(self, directory):
         if not check_for_application(directory):
             msg = """Flywrench default directory not found!\nPlease select your directory before randomizing."""
-            QMessageBox.warning(self, "Not Found!", msg)
+            QtWidgets.QMessageBox.warning(self, "Not Found!", msg)
             return
         os.chdir(directory)
         with ZipFile('FlywrenchFileBackup.zip', 'w') as backup:
@@ -150,23 +148,23 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
                     absolute_path = os.path.join(root, file)
                     relative_path = absolute_path.replace(self.settings.directory + '\\', '')
                     backup.write(absolute_path, relative_path)
-        QMessageBox.information(self, "Backup Complete", "Backup archive has been created.")
+        QtWidgets.QMessageBox.information(self, "Backup Complete", "Backup archive has been created.")
         self.statusBar.showMessage('Backup finished!')
 
     def restore_files(self):
-        QMessageBox.information(self, "Select archive", "Select the archive to restore your files from.")
-        source = QFileDialog.getOpenFileName(
+        QtWidgets.QMessageBox.information(self, "Select archive", "Select the archive to restore your files from.")
+        source = QtWidgets.QFileDialog.getOpenFileName(
             self,
             "Select the Archive",
             self.settings.directory,
             "Zip Files (*.zip)"
         )
         if not source[0]:
-            QMessageBox.information(self, "Canceled", "Canceling operation.")
+            QtWidgets.QMessageBox.information(self, "Canceled", "Canceling operation.")
             self.statusBar.showMessage('Restore operation canceled!')
             return
         if not check_for_application(self.settings.directory):
-            QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self,
                 "Invalid Directory",
                 "The directory selected does not contain the Flywrench executable."
@@ -181,24 +179,25 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
             
             { err }
             """
-        QMessageBox.information(self, "Completed Restoring", "Files have been restored from the archive.")
+            QtWidgets.QMessageBox.warning(self, "An Error has Occurred", msg)
+        QtWidgets.QMessageBox.information(self, "Completed Restoring", "Files have been restored from the archive.")
         self.statusBar.showMessage('Restoring files has completed.')
 
     def randomize_levels(self):
-        confirm = QMessageBox(
-            QMessageBox.Question,
+        confirm = QtWidgets.QMessageBox(
+            QtWidgets.QMessageBox.Question,
             "Randomize?",
             "Are you ready to randomize?"
         )
-        confirm.addButton(QMessageBox.Yes)
-        confirm.addButton(QMessageBox.No)
-        confirm.setDefaultButton(QMessageBox.No)
+        confirm.addButton(QtWidgets.QMessageBox.Yes)
+        confirm.addButton(QtWidgets.QMessageBox.No)
+        confirm.setDefaultButton(QtWidgets.QMessageBox.No)
 
         reply = confirm.exec()
-        if reply == QMessageBox.No:
+        if reply == QtWidgets.QMessageBox.No:
             return
         else:
-            randomize_levels(settings=self.settings)
+            randomize.randomize_levels(settings=self.settings)
 
 
 # Other Functions
@@ -213,15 +212,14 @@ def check_for_application(directory):
     for app_name in app_names:
         if os.path.exists(os.path.join(directory, app_name)):
             return app_name
-    else:
-        return False
+    return False
 
 
 ############
 # Main App #
 ############
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
+    app = QtWidgets.QApplication(sys.argv)
+    window = Ui()
     window.show()
     app.exec_()
