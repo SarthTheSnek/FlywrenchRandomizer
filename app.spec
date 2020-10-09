@@ -4,10 +4,11 @@ block_cipher = None
 
 
 a = Analysis(['src\\app.py'],
-             pathex=['C:\\Users\\mason\\PycharmProjects\\FlywrenchRandomizer'],
+             pathex=['.'],
              binaries=[],
              datas=[
-                 ('src\\Icon.ico', '.')
+                 ('src\\Icon.ico', '.'),
+                 ('src\\logic\\', 'logic\\')
              ],
              hiddenimports=[],
              hookspath=[],

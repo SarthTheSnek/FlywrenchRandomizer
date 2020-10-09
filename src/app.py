@@ -3,6 +3,8 @@ from PySide2.QtWidgets import *
 from zipfile import ZipFile
 
 from MainWindow import Ui_flywrench_main_window
+from logic.settings import Settings
+from logic.randomize import randomize_levels
 
 import os
 import platform
@@ -11,18 +13,6 @@ import string
 import sys
 
 operating_system = platform.platform()
-
-
-class Settings:
-    def __init__(self):
-        self.seed = None
-        self.walls = False
-        self.internal = False
-        self.names = False
-        self.intros = False
-        self.theme = "none"
-        self.random_theme = False
-        self.directory = ""
 
 
 class MainWindow(QMainWindow, Ui_flywrench_main_window):
@@ -64,6 +54,11 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
         quit_button = self.findChild(QPushButton, 'quit_button')
         quit_button.setToolTip('Quits the program, duh!')
         quit_button.clicked.connect(QApplication.instance().quit)
+
+        # Randomize Button
+        randomize_button = self.findChild(QPushButton, 'randomize_button')
+        randomize_button.setToolTip('Randomize the levels')
+        randomize_button.clicked.connect(self.randomize_levels)
 
     def initialize_textboxes(self):
         # Randomize Seed Button
@@ -188,6 +183,22 @@ class MainWindow(QMainWindow, Ui_flywrench_main_window):
             """
         QMessageBox.information(self, "Completed Restoring", "Files have been restored from the archive.")
         self.statusBar.showMessage('Restoring files has completed.')
+
+    def randomize_levels(self):
+        confirm = QMessageBox(
+            QMessageBox.Question,
+            "Randomize?",
+            "Are you ready to randomize?"
+        )
+        confirm.addButton(QMessageBox.Yes)
+        confirm.addButton(QMessageBox.No)
+        confirm.setDefaultButton(QMessageBox.No)
+
+        reply = confirm.exec()
+        if reply == QMessageBox.No:
+            return
+        else:
+            randomize_levels(settings=self.settings)
 
 
 # Other Functions
