@@ -62,6 +62,7 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
         # Randomize Seed Button
         self.seed_textbox = self.findChild(QtWidgets.QLineEdit, 'seed_textbox')
         self.seed_textbox.setText(get_random_string(16))
+        self.settings.seed = self.seed_textbox.text()
         self.seed_textbox.textChanged.connect(self.set_settings)
 
         # Populate Flywrench Directory
@@ -197,7 +198,13 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
         if reply == QtWidgets.QMessageBox.No:
             return
         else:
-            randomize.randomize_levels(settings=self.settings)
+            game_planets = randomize.level_setup(settings=self.settings)
+            randomize.set_seed(seed=self.settings.seed)
+            randomize.randomize_walls(game_levels=game_planets)
+            # TODO: Randomize the Obstacles
+            # TODO: Randomize the Turrets
+            # TODO: Randomize the Pinwheels
+            # TODO: Randomize the Moving Lines
 
 
 # Other Functions

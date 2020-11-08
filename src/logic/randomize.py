@@ -1,19 +1,34 @@
-from PySide2.QtWidgets import QMessageBox
+import random
 
-from .convert import *
+from os import listdir
+from os.path import isfile, join
+
+from .convert import planet_to_dict
 from .settings import Settings
 
+game = []
 
-def randomize_levels(settings: Settings):
-    print("Made it into the thing")
+
+def set_seed(seed: str):
+    print("Setting seed to: " + seed)
+    random.seed(seed)
+
+
+def level_setup(settings: Settings):
     level_directory = settings.directory + "/ReadOnlyFiles/"
-    print("Level directory:" + level_directory)
-    msgBox = QMessageBox()
-    msgBox.setText("Congrats! This is a thing!")
-    msgBox.exec_()
-    print("Finished")
-    # game = convert_levels(settings)
+    planet_files = [f for f in listdir(level_directory) if isfile(join(level_directory, f))]
+    for planet in planet_files:
+        if "PLUTO" in planet:
+            planet_level = planet_to_dict(level_directory, planet)
+            game.append(planet_level)
+        else:
+            continue
+    return game
 
 
-def convert_levels(filepath: str) -> {}:
-    return {}
+def randomize_walls(game_levels: []):
+    wall_colors = ['bounceOff', 'deathThru']
+    for planet in game_levels:
+        for level in planet.levels:
+            for wall in level.walls:
+                wall['m'] = random.choice(wall_colors)

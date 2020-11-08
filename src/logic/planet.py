@@ -7,23 +7,35 @@ class Planet:
         self.published_file_id = None
         self.levels = []
 
-    def add_level(self, level: {}):
-        self.levels[level['name']] = level['objects']
+    def add_level(self, level):
+        self.levels.append(level)
 
     def add_published_file_id(self, file_id: str):
         self.published_file_id = file_id
 
 
 class Level:
-    def __init__(
-            self,
-            name: str
-    ):
-        self.name = name
-        self.obstacles = []
+    def __init__(self):
+        self.title = None
+        self.enter_point = None
+        self.exit_point = None
+        self.walls = []
+        self.inside = []
 
-    def add_obstacle(self, obstacle: {}):
-        self.obstacles.append(obstacle)
+    def add_title(self, name: str):
+        self.title = name
+
+    def add_enter(self, entrance: {}):
+        self.enter_point = entrance
+
+    def add_exit(self, exit_point: {}):
+        self.exit_point = exit_point
+
+    def add_wall(self, wall: {}):
+        self.walls.append(wall)
+
+    def add_inside(self, inside: {}):
+        self.inside.append(inside)
 
 
 class Obstacle:
@@ -47,4 +59,3 @@ class Obstacle:
             y_name: y
         }
         self.coordinates.append(coordinates)
-
