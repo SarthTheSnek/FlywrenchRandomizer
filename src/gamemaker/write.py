@@ -14,6 +14,16 @@ def tofile(planets: [], config: settings.Settings):
                     file.write(wall.to_gm() + '\n')
                 for obstacle in level.inside:
                     file.write(obstacle.to_gm() + '\n')
+                for pinwheel in level.pinwheels:
+                    file.write(pinwheel.to_gm() + '\n')
+                for gravity in level.gravitywells:
+                    file.write(gravity.to_gm() + '\n')
+                for turret in level.turrets:
+                    file.write(turret.to_gm() + '\n')
+                for switch in level.switches:
+                    file.write(switch.to_gm() + '\n')
+                for movingline in level.movinglines:
+                    file.write(movingline.to_gm() + '\n')
             file.close()
         except Exception as err:
             print("Something went wrong")

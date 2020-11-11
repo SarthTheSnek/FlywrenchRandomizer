@@ -5,6 +5,11 @@ class Level:
         self.exit_point = None
         self.walls = []
         self.inside = []
+        self.pinwheels = []
+        self.gravitywells = []
+        self.turrets = []
+        self.switches = []
+        self.movinglines = []
 
     def set_title(self, name: str):
         self.title = name
@@ -20,6 +25,21 @@ class Level:
 
     def add_inside(self, inside: {}):
         self.inside.append(inside)
+
+    def add_pinwheel(self, pinwheel: {}):
+        self.pinwheels.append(pinwheel)
+
+    def add_gravitywell(self, gravity: {}):
+        self.gravitywells.append(gravity)
+
+    def add_turret(self, turret: {}):
+        self.turrets.append(turret)
+
+    def add_switch(self, switch: {}):
+        self.switches.append(switch)
+
+    def add_movingline(self, movingline: {}):
+        self.movinglines.append(movingline)
 
     def to_gm(self):
         level_title = f'<title>{self.title}'

@@ -8,7 +8,9 @@ a = Analysis(['src\\app.py'],
              binaries=[],
              datas=[
                  ('src\\Icon.ico', '.'),
-                 ('src\\logic\\', 'logic\\')
+                 ('src\\logic\\', 'logic\\'),
+                 ('src\\flywrench\\', 'flywrench\\'),
+                 ('src\\gamemaker\\', 'gamemaker\\')
              ],
              hiddenimports=[],
              hookspath=[],

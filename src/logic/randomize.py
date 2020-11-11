@@ -19,11 +19,9 @@ def level_setup(settings: Settings):
     level_directory = settings.directory + "/ReadOnlyFiles/"
     planet_files = [f for f in listdir(level_directory) if isfile(join(level_directory, f))]
     for planet in planet_files:
-        if "PLUTO" in planet:
-            planet_level = convert.ToObj(level_directory, planet)
-            game.append(planet_level)
-        else:
-            continue
+        planet_level = convert.ToObj(level_directory, planet)
+        print(planet_level.__dict__)
+        game.append(planet_level)
     return game
 
 

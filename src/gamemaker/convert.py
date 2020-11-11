@@ -15,7 +15,8 @@ def ToObj(directory: str, file: str) -> planet.Planet:
                         level_strings.clear()
                     level_strings.append(line)
                 elif index+1 == len(file_lines):
-                    level_strings.append(line)
+                    if line.strip():
+                        level_strings.append(line)
                     new_level = setup_level(level_strings)
                     game_planet.add_level(new_level)
                 elif not line.strip():
@@ -55,20 +56,42 @@ def setup_level(obj: []):
             elif object_dict['obj'] == 'shipExit':
                 lvl.set_exit(x=int(object_dict['x1']), y=int(object_dict['y1']))
             else:
-                if object_dict['m'] == "bounceOff":
+                if object_dict['obj'] == "gravityWell":
+                    gravity = obstacle.GravityWell()
+                    gravity.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
+                    gravity.add_coordinate(x=int(object_dict['x2']), y=int(object_dict['y2']))
+                    lvl.add_wall(gravity)
+                elif object_dict['obj'] == "pinwheel":
+                    pinwheel = obstacle.Pinwheel(object_dict['direction'], obstacle.LineColors(value=object_dict['m']))
+                    pinwheel.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
+                    pinwheel.add_coordinate(x=int(object_dict['x2']), y=int(object_dict['y2']))
+                    lvl.add_pinwheel(pinwheel)
+                elif object_dict['obj'] == "turret":
+                    turret = obstacle.Turret()
+                    turret.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
+                    turret.set_color(obstacle.LineColors(value=object_dict['m']))
+                    lvl.add_turret(turret)
+                elif object_dict['obj'] == "switch":
+                    switch = obstacle.Switch()
+                    switch.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
+                    lvl.add_switch(switch)
+                elif object_dict['obj'] == "movingLine":
+                    movingline = obstacle.MovingLine(obstacle.LineColors(value=object_dict['m']))
+                    movingline.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
+                    movingline.add_coordinate(x=int(object_dict['x2']), y=int(object_dict['y2']))
+                    movingline.set_starting_coordinate(x=int(object_dict['startX']), y=int(object_dict['startY']))
+                    movingline.set_ending_coordinate(x=int(object_dict['endX']), y=int(object_dict['endY']))
+                    lvl.add_movingline(movingline)
+                elif object_dict['m'] == "bounceOff":
                     wall = obstacle.Wall()
-                    wall.set_color(obstacle.LineColors(value=object_dict['m']))
                     wall.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
                     wall.add_coordinate(x=int(object_dict['x2']), y=int(object_dict['y2']))
                     lvl.add_wall(wall)
                 else:
-                    temp = obstacle.Obstacle(
-                        obstacle_type=object_dict['obj'],
-                        obstacle_color=obstacle.LineColors(value=object_dict['m'])
-                    )
-                    temp.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
-                    temp.add_coordinate(x=int(object_dict['x2']), y=int(object_dict['y2']))
-                    lvl.add_inside(temp)
+                    obst = obstacle.Obstacle(obstacle_color=obstacle.LineColors(value=object_dict['m']))
+                    obst.add_coordinate(x=int(object_dict['x1']), y=int(object_dict['y1']))
+                    obst.add_coordinate(x=int(object_dict['x2']), y=int(object_dict['y2']))
+                    lvl.add_inside(obst)
     return lvl
 
 
