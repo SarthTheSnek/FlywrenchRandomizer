@@ -5,6 +5,12 @@ class Settings:
         self.internal = False
         self.names = False
         self.intros = False
-        self.theme = "none"
+        self.theme = ""
         self.random_theme = False
         self.directory = ""
+
+    def am_i_randomizing(self):
+        if self.walls:
+            return True
+        else:
+            return False

@@ -8,3 +8,5 @@ src/__pycache__/
 src/logic/__pycache__/
 
 .python-version
+
+*__pycache__*

@@ -35,7 +35,6 @@ class Ui_flywrench_main_window(object):
         self.walls_checkbox = QCheckBox(self.centralwidget)
         self.walls_checkbox.setObjectName(u"walls_checkbox")
         self.walls_checkbox.setGeometry(QRect(10, 140, 399, 23))
-        self.walls_checkbox.setVisible(False)
         self.obstacles_checkbox = QCheckBox(self.centralwidget)
         self.obstacles_checkbox.setObjectName(u"obstacles_checkbox")
         self.obstacles_checkbox.setEnabled(False)

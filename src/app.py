@@ -3,6 +3,7 @@ from zipfile import ZipFile
 
 from MainWindow import Ui_flywrench_main_window
 from logic import randomize, settings
+from gamemaker import convert, write
 
 import os
 import platform
@@ -122,6 +123,7 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
             self.settings.walls = self.randomize_checkbox.isChecked()
         elif sender.objectName() == 'seed_textbox':
             if not self.seed_textbox.text():
+                self.settings.seed = None
                 self.seed_textbox.setStyleSheet("QLineEdit"
                                                 "{"
                                                 "background : red;"
@@ -198,13 +200,31 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
         if reply == QtWidgets.QMessageBox.No:
             return
         else:
+            if self.settings.seed is None:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "No seed set!",
+                    "Please set a seed to start randomizing!"
+                )
+                return
+            elif self.settings.am_i_randomizing() is False:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Nothing selected!",
+                    "None of the randomizing options have been selected! Will not randomize."
+                )
+                return
             game_planets = randomize.level_setup(settings=self.settings)
             randomize.set_seed(seed=self.settings.seed)
-            randomize.randomize_walls(game_levels=game_planets)
+            if self.settings.walls:
+                randomize.randomize_walls(game_levels=game_planets)
             # TODO: Randomize the Obstacles
             # TODO: Randomize the Turrets
             # TODO: Randomize the Pinwheels
             # TODO: Randomize the Moving Lines
+            # TODO: Write levels to files
+            write.tofile(game_planets, self.settings)
+            print("Finished!")
 
 
 # Other Functions
