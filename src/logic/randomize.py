@@ -1,7 +1,7 @@
+import os
 import random
 import sys
 
-from os import listdir, path
 from os.path import isfile, join
 
 from gamemaker import convert
@@ -18,7 +18,7 @@ def set_seed(seed: str):
 
 def level_setup(settings: Settings):
     level_directory = settings.directory + "/ReadOnlyFiles/"
-    planet_files = [f for f in listdir(level_directory) if isfile(join(level_directory, f))]
+    planet_files = [f for f in os.listdir(level_directory) if isfile(join(level_directory, f))]
     for planet in planet_files:
         planet_level = convert.ToObj(level_directory, planet)
         game.append(planet_level)
@@ -27,9 +27,9 @@ def level_setup(settings: Settings):
 
 def randomize_level_names(game_levels: []):
     if getattr(sys, 'frozen', False):
-        application_path = path.join(path.dirname(sys.executable), "flywrench", "space_words.txt")
+        application_path = os.path.join(os.path.dirname(__file__), "..", "flywrench", "space_words.txt")
     elif __file__:
-        application_path = path.join(path.dirname(__file__), "../", "flywrench", "space_words.txt")
+        application_path = os.path.join(os.path.dirname(__file__), "..", "flywrench", "space_words.txt")
 
     with open(application_path) as f:
         lines = f.readlines()
