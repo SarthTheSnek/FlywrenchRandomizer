@@ -71,9 +71,13 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
         self.discover_directory()
 
     def initialize_checkboxes(self):
-        self.randomize_checkbox = self.findChild(QtWidgets.QCheckBox, 'walls_checkbox')
-        self.randomize_checkbox.setToolTip('Randomize the color of the walls of the levels')
-        self.randomize_checkbox.stateChanged.connect(self.set_settings)
+        self.randomize_walls_checkbox = self.findChild(QtWidgets.QCheckBox, 'walls_checkbox')
+        self.randomize_walls_checkbox.setToolTip('Randomize the color of the walls of the levels')
+        self.randomize_walls_checkbox.stateChanged.connect(self.set_settings)
+
+        self.randomize_level_names = self.findChild(QtWidgets.QCheckBox, 'level_names_checkbox')
+        self.randomize_level_names.setToolTip('Randomize the names of the levels in each planet')
+        self.randomize_level_names.stateChanged.connect(self.set_settings)
 
     # Events
     def randomize_seed(self):
@@ -120,7 +124,9 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
     def set_settings(self):
         sender = self.sender()
         if sender.objectName() == 'walls_checkbox':
-            self.settings.walls = self.randomize_checkbox.isChecked()
+            self.settings.walls = self.randomize_walls_checkbox.isChecked()
+        elif sender.objectName() == 'level_names_checkbox':
+            self.settings.names = self.randomize_level_names.isChecked()
         elif sender.objectName() == 'seed_textbox':
             if not self.seed_textbox.text():
                 self.settings.seed = None
@@ -222,7 +228,8 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
             # TODO: Randomize the Turrets
             # TODO: Randomize the Pinwheels
             # TODO: Randomize the Moving Lines
-            # TODO: Write levels to files
+            if self.settings.names:
+                randomize.randomize_level_names(game_levels=game_planets)
             write.tofile(game_planets, self.settings)
             print("Finished!")
 
