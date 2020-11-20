@@ -3,6 +3,7 @@ dist/
 venv/
 .git/
 .idea/
+app.spec
 
 src/__pycache__/
 src/logic/__pycache__/

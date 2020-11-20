@@ -127,5 +127,5 @@ Distributed under the MIT License. See `LICENSE` for more information
 [python-url]: https://www.python.org/downloads/release/python-380
 [release-shield]: https://img.shields.io/github/release/sarththesnek/flywrenchrandomizer?style=for-the-badge
 [release-url]: https://github.com/sarththesnek/flywrenchrandomizer/releases
-[level-editor-ss]: https://steamcdn-a.akamaihd.net/steam/apps/337350/ss_281329bb286e998931901da4bedfc4f14262a694.600x338.jpg?t=1574371502
+[level-editor-ss]: https://github.com/SarthTheSnek/FlywrenchRandomizer/blob/master/.github/IMAGES/window.png?raw=true
 [flywrench-steam-url]: https://store.steampowered.com/app/337350/Flywrench/
