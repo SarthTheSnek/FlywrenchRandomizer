@@ -75,6 +75,22 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
         self.randomize_walls_checkbox.setToolTip('Randomize the color of the walls of the levels')
         self.randomize_walls_checkbox.stateChanged.connect(self.set_settings)
 
+        self.randomize_all_internals_checkbox = self.findChild(QtWidgets.QCheckBox, 'all_internals_checkbox')
+        self.randomize_all_internals_checkbox.setToolTip('Randomize all obstacles inside of each level')
+        self.randomize_all_internals_checkbox.stateChanged.connect(self.set_settings)
+
+        self.randomize_movinglines_checkbox = self.findChild(QtWidgets.QCheckBox, 'movinglines_checkbox')
+        self.randomize_movinglines_checkbox.setToolTip('Randomize colors of moving lines')
+        self.randomize_movinglines_checkbox.stateChanged.connect(self.set_settings)
+
+        self.randomize_turrets_checkbox = self.findChild(QtWidgets.QCheckBox, 'turrets_checkbox')
+        self.randomize_turrets_checkbox.setToolTip('Randomize colors of the turrets and their bullets')
+        self.randomize_turrets_checkbox.stateChanged.connect(self.set_settings)
+
+        self.randomize_pinwheels_checkbox = self.findChild(QtWidgets.QCheckBox, 'pinwheels_checkbox')
+        self.randomize_pinwheels_checkbox.setToolTip('Randomize colors of the pinwheels in the levels')
+        self.randomize_pinwheels_checkbox.stateChanged.connect(self.set_settings)
+
         self.randomize_level_names = self.findChild(QtWidgets.QCheckBox, 'level_names_checkbox')
         self.randomize_level_names.setToolTip('Randomize the names of the levels in each planet')
         self.randomize_level_names.stateChanged.connect(self.set_settings)
@@ -125,6 +141,22 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
         sender = self.sender()
         if sender.objectName() == 'walls_checkbox':
             self.settings.walls = self.randomize_walls_checkbox.isChecked()
+        elif sender.objectName() == 'movinglines_checkbox':
+            self.settings.movinglines = self.randomize_movinglines_checkbox.isChecked()
+        elif sender.objectName() == 'turrets_checkbox':
+            self.settings.turrets = self.randomize_turrets_checkbox.isChecked()
+        elif sender.objectName() == 'pinwheels_checkbox':
+            self.settings.pinwheels = self.randomize_pinwheels_checkbox.isChecked()
+        elif sender.objectName() == 'all_internals_checkbox':
+            if self.randomize_all_internals_checkbox.isChecked():
+                self.randomize_movinglines_checkbox.setEnabled(False)
+                self.randomize_turrets_checkbox.setEnabled(False)
+                self.randomize_pinwheels_checkbox.setEnabled(False)
+            else:
+                self.randomize_movinglines_checkbox.setEnabled(True)
+                self.randomize_turrets_checkbox.setEnabled(True)
+                self.randomize_pinwheels_checkbox.setEnabled(True)
+            self.settings.allinternal = self.randomize_all_internals_checkbox.isChecked()
         elif sender.objectName() == 'level_names_checkbox':
             self.settings.names = self.randomize_level_names.isChecked()
         elif sender.objectName() == 'seed_textbox':
@@ -220,18 +252,26 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
                     "None of the randomizing options have been selected! Will not randomize."
                 )
                 return
+            if self.settings.allinternal is True:
+                print("In here!")
+                self.settings.movinglines = True
+                self.settings.turrets = True
+                self.settings.pinwheels = True
+
             game_planets = randomize.level_setup(settings=self.settings)
             randomize.set_seed(seed=self.settings.seed)
             if self.settings.walls:
                 randomize.randomize_walls(game_levels=game_planets)
             # TODO: Randomize the Obstacles
-            # TODO: Randomize the Turrets
-            # TODO: Randomize the Pinwheels
-            # TODO: Randomize the Moving Lines
+            if self.settings.turrets:
+                randomize.randomize_turrets(game_levels=game_planets)
+            if self.settings.pinwheels:
+                randomize.randomize_pinwheels(game_levels=game_planets)
+            if self.settings.movinglines:
+                randomize.randomize_moving_lines(game_levels=game_planets)
             if self.settings.names:
                 randomize.randomize_level_names(game_levels=game_planets)
             write.tofile(game_planets, self.settings)
-            print("Finished!")
 
 
 # Other Functions

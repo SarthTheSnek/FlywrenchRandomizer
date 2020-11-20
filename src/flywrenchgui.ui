@@ -56,12 +56,12 @@
      </rect>
     </property>
     <property name="text">
-     <string>Randomize Walls</string>
+     <string>Walls</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="obstacles_checkbox">
+   <widget class="QCheckBox" name="all_internals_checkbox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -72,17 +72,17 @@
      </rect>
     </property>
     <property name="text">
-     <string>Randomize Internal Lines</string>
+     <string>Internals</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="level_names_checkbox">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>230</y>
+      <y>390</y>
       <width>399</width>
       <height>23</height>
      </rect>
@@ -98,7 +98,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
+      <y>420</y>
       <width>399</width>
       <height>23</height>
      </rect>
@@ -481,6 +481,70 @@ Directory:</string>
     </property>
     <property name="orientation">
      <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="turrets_checkbox">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>230</y>
+      <width>371</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Turrets</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="pinwheels_checkbox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>260</y>
+      <width>371</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Pinwheels</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="movinglines_checkbox">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>290</y>
+      <width>371</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Moving Lines</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="obstacles_checkbox">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>200</y>
+      <width>371</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Lines</string>
     </property>
    </widget>
   </widget>

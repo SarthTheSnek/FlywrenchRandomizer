@@ -36,7 +36,6 @@ def randomize_level_names(game_levels: []):
         for planet in game_levels:
             for lvl in planet.levels:
                 new_level_name = f'{random.choice(lines).strip()}_{random.choice(lines).strip()}'
-                print(new_level_name)
                 lvl.set_title(name=new_level_name)
 
 
@@ -46,3 +45,27 @@ def randomize_walls(game_levels: []):
         for lvl in planet.levels:
             for wall in lvl.walls:
                 wall.obstacle_color = random.choice(wall_colors)
+
+
+def randomize_turrets(game_levels: []):
+    for planet in game_levels:
+        for lvl in planet.levels:
+            for turret in lvl.turrets:
+                turret.obstacle_color = random.choice(list(LineColors))
+
+
+def randomize_moving_lines(game_levels: []):
+    line_colors = [LineColors.RED, LineColors.WHITE, LineColors.GREEN]
+    for planet in game_levels:
+        for lvl in planet.levels:
+            for line in lvl.movinglines:
+                if line.obstacle_color != LineColors.BLUE:
+                    line.obstacle_color = random.choice(line_colors)
+
+
+def randomize_pinwheels(game_levels: []):
+    for planet in game_levels:
+        for lvl in planet.levels:
+            for pinwheel in lvl.pinwheels:
+                if pinwheel.obstacle_color != LineColors.BLUE:
+                    pinwheel.obstacle_color = random.choice(list(LineColors))
