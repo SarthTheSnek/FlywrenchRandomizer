@@ -258,20 +258,40 @@ class Ui(QtWidgets.QMainWindow, Ui_flywrench_main_window):
                 self.settings.turrets = True
                 self.settings.pinwheels = True
 
+            progress = QtWidgets.QProgressDialog()
+            progress.setWindowTitle("Randomizing Levels...")
+            progress.setAutoClose(True)
+            progress.show()
+            progress.setValue(0)
+
             game_planets = randomize.level_setup(settings=self.settings)
             randomize.set_seed(seed=self.settings.seed)
             if self.settings.walls:
+                progress.setLabelText("Randomizing walls...")
                 randomize.randomize_walls(game_levels=game_planets)
+                progress.setValue(16)
             # TODO: Randomize the Obstacles
             if self.settings.turrets:
+                progress.setLabelText("Randomizing turrets...")
                 randomize.randomize_turrets(game_levels=game_planets)
+                progress.setValue(33)
             if self.settings.pinwheels:
+                progress.setLabelText("Randomizing pinwheels...")
                 randomize.randomize_pinwheels(game_levels=game_planets)
+                progress.setValue(50)
             if self.settings.movinglines:
+                progress.setLabelText("Randomizing lines that are moving...")
                 randomize.randomize_moving_lines(game_levels=game_planets)
+                progress.setValue(67)
             if self.settings.names:
+                progress.setLabelText("Randomizing level names...")
                 randomize.randomize_level_names(game_levels=game_planets)
+                progress.setValue(83)
+            progress.setLabelText("Writing randomized levels to files...")
             write.tofile(game_planets, self.settings)
+            progress.setValue(100)
+            del progress
+            QtWidgets.QMessageBox.information(self, "Levels Randomized", "Flywrench has been randomized! Spin to victory!")
 
 
 # Other Functions
